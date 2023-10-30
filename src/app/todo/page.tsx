@@ -1,10 +1,13 @@
 import ToDoTable from "./components/todoTable";
+import { auth } from '@clerk/nextjs';
 
 async function getData() {
-    const res = await fetch('http://localhost:3000/api/todo', { cache: 'no-store'});
+    const { getToken } = auth();    
+    const res = await fetch('http://localhost:3000/api/todo', { cache: 'no-store',  headers: { Authorization: `Bearer ${await getToken()}` }});
 
     if(!res.ok) {
-        throw new Error('failed to fetch data');
+        console.log(res);
+        
     }
     
     return res.json();
